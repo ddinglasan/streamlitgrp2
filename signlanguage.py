@@ -46,6 +46,9 @@ file = st.file_uploader("---", type=["jpg", "png"])
 
 def import_and_predict(image_data, model):
     try:
+        # Ensure the image is in RGB format
+        if image_data.mode == 'RGBA':
+            image_data = image_data.convert('RGB')
         size = (64, 64)  # Ensure this matches the model's expected input size
         image = ImageOps.fit(image_data, size, Image.LANCZOS)
         img = np.asarray(image)
@@ -64,7 +67,7 @@ else:
     try:
         image = Image.open(file)
         if image.mode not in ["RGB", "RGBA"]:
-            st.error("Please upload an RGB image.")
+            st.error("Please upload an RGB or RGBA image.")
         else:
             st.image(image, use_column_width=True)
             prediction = import_and_predict(image, model)
