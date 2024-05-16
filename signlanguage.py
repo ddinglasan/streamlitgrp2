@@ -49,13 +49,17 @@ def import_and_predict(image_data, model):
         size = (64, 64)  # Ensure this matches the model's expected input size
         image = ImageOps.fit(image_data, size, Image.LANCZOS)
         img = np.asarray(image)
+        
+        if img.shape[2] != 3:
+            raise ValueError("Invalid image depth. Image must have 3 channels.")
+        
         img = img / 255.0  # Normalize pixel values
         img = np.expand_dims(img, axis=0)
 
         prediction = model.predict(img)
         return prediction
     except Exception as e:
-        st.error(f"Error in processing the image: {e}")
+        st.error(f"Error in processing the image. Please upload a valid image. {e}")
         return None
 
 if file is None:
