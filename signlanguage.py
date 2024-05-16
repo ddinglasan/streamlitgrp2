@@ -34,15 +34,15 @@ st.markdown(
     .st-emotion-cache-13ln4jf 
     {{
         width: 100%;
-        padding: 40rem 1rem 10rem;
+        padding: 10rem 1rem 10rem;
         max-width: 46rem;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
-
-file = st.file_uploader("Choose a hand gesture from the photos", type=["jpg", "png"])
+st.header('CHOOSE A HAND GESTURE FROM THE PHOTOS', divider='rainbow', )
+file = st.file_uploader("---", type=["jpg", "png"])
 
 def import_and_predict(image_data, model):
     size = (50, 50)  # Match the input size with the Google Colab code
@@ -58,7 +58,7 @@ def import_and_predict(image_data, model):
     return prediction
 
 if file is None:
-    st.text("Please upload an image file")
+    st.text('Please Upload an Image')
 else:
     image = Image.open(file)
     st.image(image, use_column_width=True)
