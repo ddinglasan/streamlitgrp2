@@ -45,20 +45,21 @@ st.header('CHOOSE A HAND GESTURE FROM THE PHOTOS', divider='rainbow')
 file = st.file_uploader("---", type=["jpg", "png"])
 
 def import_and_predict(image_data, model):
-    try:
-        size = (64, 64)  # Ensure this matches the model's expected input size
-        image = ImageOps.fit(image_data, size, Image.LANCZOS)
-        img = np.asarray(image)
-        
-        if img.shape[2] != 3:
-            raise ValueError("Invalid image depth. Image must have 3 channels.")
-        
-        img = img / 255.0  # Normalize pixel values
-        img = np.expand_dims(img, axis=0)
+    size = (50, 50)  # Match the input size with the Google Colab code
+    image = ImageOps.fit(image_data, size, Image.LANCZOS)  # Use Image.LANCZOS for resizing
+    img = np.asarray(image)
+    img = img / 255.0  # Normalize pixel values
+    img = np.expand_dims(img, axis=0)
 
-        prediction = model.predict(img)
-        return prediction
-    except Exception as e:
+    # Reshape input according to the model's input shape
+    img_reshape = tf.image.resize(img, [64, 64])  # Resize to (64, 64)
+
+if img.shape[2] != 3:
+            raise ValueError("Invalid image depth. Image must have 3 channels.")
+    
+    prediction = model.predict(img_reshape)
+    return prediction
+except Exception as e:
         st.error(f"Error in processing the image. Please upload a valid image. {e}")
         return None
 
