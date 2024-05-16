@@ -61,6 +61,20 @@ def import_and_predict(image_data, model):
         st.error(f"Error in processing the image: {e}")
         return None
 
+def display_prediction(prediction, class_names, confidence_threshold=0.5):
+    if prediction is not None:
+        confidence_scores = tf.nn.softmax(prediction[0])
+        max_confidence = np.max(confidence_scores)
+        predicted_class = np.argmax(confidence_scores)
+        
+        if max_confidence >= confidence_threshold:
+            result = f"OUTPUT : {class_names[predicted_class]} (Confidence: {max_confidence:.2f})"
+            st.success(result)
+        else:
+            st.warning("The model is not confident in its prediction. Please try another image.")
+    else:
+        st.error("Prediction could not be made. Please try another image.")
+
 if file is None:
     st.text('Please Upload an Image')
 else:
@@ -71,14 +85,10 @@ else:
         else:
             st.image(image, use_column_width=True)
             prediction = import_and_predict(image, model)
-            if prediction is not None:
-                class_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8',
-                               '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
-                               'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-                               'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-                string = "OUTPUT : " + class_names[np.argmax(prediction)]
-                st.success(string)
-            else:
-                st.error("Prediction could not be made. Please try another image.")
+            class_names = ['0', '1', '2', '3', '4', '5', '6', '7', '8',
+                           '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+                           'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                           'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+            display_prediction(prediction, class_names)
     except Exception as e:
         st.error(f"Error loading the image: {e}")
