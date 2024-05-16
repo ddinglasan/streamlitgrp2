@@ -34,7 +34,7 @@ st.markdown(
     .st-emotion-cache-13ln4jf 
     {{
         width: 100%;
-        padding: 10rem 1rem 10rem;
+        padding: 20rem 1rem 10rem;
         max-width: 46rem;
     }}
     </style>
